@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "linked_list.h"
+#include "single_linked_list.h"
 using namespace std;
 
 void starter(){
@@ -9,28 +9,49 @@ void starter(){
 
 
 int main(){
+    
     starter();
+    
     vector<int> v1 {2,8,10,11};
-    vector<int> v2 {};
+    vector<int> v2 {3,5};
+    vector <int> v { 10,50,20,100,80 };
+    
     myLinkedList::Node *ll1 = myLinkedList::createLL(v1);
     myLinkedList::Node *ll2 = myLinkedList::createLL(v2);
 
-    //myLinkedList::concatenated = myLinkedList::concatenateLL(ll1,ll2);
-    //myLinkedList::displayLL(myLinkedList::concatenated);
+    
+    /* myLinkedList::head = myLinkedList::createCircularLL(v);
+    myLinkedList::displayLL(myLinkedList::head); */
+    
 
-    myLinkedList::merged = myLinkedList::mergeLL(ll1,ll2);
-    myLinkedList::displayLL(myLinkedList::merged);
-    //myLinkedList::head = myLinkedList::createLL(v);
+    /* myLinkedList::Node *concatenated = myLinkedList::concatenateLL(ll1,ll2);
+    myLinkedList::displayLL(concatenated); */
 
-    //myLinkedList::insertNodeLL(myLinkedList::head,1,88888);
-    //myLinkedList::insertNodeLL(myLinkedList::head,0,50);
-    //myLinkedList::displayLL(myLinkedList::head);
-    //myLinkedList::deleteNode(myLinkedList::head, 2);
-    //myLinkedList::displayLL(myLinkedList::head);
-    //cout << myLinkedList::isSortedLL(myLinkedList::head) <<endl;
-    //myLinkedList::reverseLLPointers(myLinkedList::head);
-    //myLinkedList::displayLL(myLinkedList::head);
+    /* myLinkedList::Node *merged = myLinkedList::mergeLL(ll1,ll2);
+    myLinkedList::displayLL(merged); */
 
+    /* myLinkedList::head = myLinkedList::createLL(v);
+    myLinkedList::insertNodeLL(myLinkedList::head,1,88888);
+    myLinkedList::insertNodeLL(myLinkedList::head,0,50);
+    myLinkedList::displayLL(myLinkedList::head); */
+
+
+    /* myLinkedList::head = myLinkedList::createLL(v);
+    myLinkedList::deleteNodeLL(myLinkedList::head, 2);
+    myLinkedList::displayLL(myLinkedList::head); */
+
+    
+   /*  myLinkedList::head = myLinkedList::createLL(v);
+    cout << myLinkedList::isSortedLL(myLinkedList::head) <<endl; */
+
+    
+    /* myLinkedList::head = myLinkedList::createLL(v);
+    myLinkedList::reverseLLPointers(myLinkedList::head);
+    myLinkedList::displayLL(myLinkedList::head); */
+
+
+   /*  myLinkedList::head = myLinkedList::createLL(v);
+    cout << myLinkedList::isCyclicLL(myLinkedList::head) <<endl; */
 }
 
 
