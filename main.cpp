@@ -14,7 +14,7 @@ int main(){
     
     vector<int> v1 {2,8,10,11};
     vector<int> v2 {3,5};
-    vector <int> v { 10,50,20,100,80 };
+    vector <int> v { 10,50,20,80,400 };
     
     myLinkedList::Node *ll1 = myLinkedList::createLL(v1);
     myLinkedList::Node *ll2 = myLinkedList::createLL(v2);
@@ -24,6 +24,23 @@ int main(){
     myLinkedList::displayLL(myLinkedList::head); */
     
 
+    //myLinkedList::head = myLinkedList::createCircularLL(v);
+    myLinkedList::head = myLinkedList::createLL(v);
+    cout << myLinkedList::isCyclicLL(myLinkedList::head) <<endl;
+
+
+
+
+    /* myLinkedList::head = myLinkedList::createLL(v);
+    myLinkedList::head = myLinkedList::createCircularLL(v);
+    myLinkedList::reverseLL(myLinkedList::head);
+    myLinkedList::displayLL(myLinkedList::head); */
+    
+    
+    /* myLinkedList::head = myLinkedList::createLL(v);
+    myLinkedList::insertNodeLL(myLinkedList::head,4,88888);
+    myLinkedList::displayLL(myLinkedList::head); */
+    
     /* myLinkedList::Node *concatenated = myLinkedList::concatenateLL(ll1,ll2);
     myLinkedList::displayLL(concatenated); */
 
@@ -46,7 +63,7 @@ int main(){
 
     
     /* myLinkedList::head = myLinkedList::createLL(v);
-    myLinkedList::reverseLLPointers(myLinkedList::head);
+    myLinkedList::reverseLL(myLinkedList::head);
     myLinkedList::displayLL(myLinkedList::head); */
 
 

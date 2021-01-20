@@ -12,7 +12,32 @@ namespace myLinkedList{
     void emptyLLMSG(){
         cout << "Empty Linked List!\n";
     }
+  
+    bool isEmptyLL(Node *first){
+        return first == NULL ? true : false;    
+    }
+   
     
+    int getSizeLL(Node *first ){
+
+        if (isEmptyLL(first))
+            return 0;
+        
+        
+        int count=0;
+
+        while (first){
+            count++;
+
+            if (first->next == head) 
+                break;
+
+            first = first->next;
+        }   
+        
+        return count;
+    } 
+
     Node *createLL (vector <int> vec ){
         
         if (!vec.size())
@@ -49,31 +74,13 @@ namespace myLinkedList{
         return circular;
     }
     
+    Node *getLastNodeLL(Node *first){
 
-    bool isEmptyLL(Node *first){
-        return first == NULL ? true : false;    
-    }
-   
-    
-    int getSizeLL(Node *first ){
-
-        if (isEmptyLL(first))
-            return 0;
-        
-        
-        int count=0;
-
-        while (first){
-            count++;
-
-            if (first->next == head) 
-                break;
-
+        while ( (first->next != head) && first->next ) 
             first = first->next;
-        }   
         
-        return count;
-    } 
+        return first;
+    }
 
     void displayLL( Node *first){
 
@@ -91,32 +98,6 @@ namespace myLinkedList{
             first = first->next;
         }
         cout << endl;  
-    }
-
-    void insertNodeLL(Node *first, int index, int value){
-
-        int length = getSizeLL(first);
-        
-        if (index  > length || index < 0){
-            cout << "Index is out of Linked List size!\n";
-            return;
-        }
-            
-        Node *temp = new Node; 
-        temp->data = value;
-
-        if (index == 0){
-            temp->next =  head;
-            head = temp;
-        }
-        else{
-            int i=0;
-            for(; i < index-1; i++)
-                first = first->next;
-                
-            temp->next = first->next;
-            first->next = temp;
-        }
     }
 
     int searchNodeLL(Node *first, int key){
@@ -142,35 +123,6 @@ namespace myLinkedList{
         return -1;   
     }
 
-    void deleteNodeLL( Node *first, int index){
-        
-        if (isEmptyLL(first)){
-            emptyLLMSG();
-            return;
-        }
-            
-        if (index <0 || index >= getSizeLL(first)){
-            cout << "Index is out of Linked List size!\n";  
-            return;
-        } 
-       
-        if (index == 0){
-            head= head->next;
-            delete first;
-        }            
-        else {
-            int i=0;
-            for (;i<index-1; i++)
-                first = first->next;
-            
-            Node *temp = new Node;
-            temp = first->next;
-            first->next = temp->next;
-            temp = NULL;
-            delete temp;
-        }     
-    }
-
     bool isSortedLL(Node *first){
     
         if (isEmptyLL(first)){
@@ -192,32 +144,32 @@ namespace myLinkedList{
         return true;
     }
 
-    void reverseLLElements(Node *first){
-        
+    bool isCyclicLL(Node *first){
+
         if (isEmptyLL(first)){
             emptyLLMSG();
-            return;
+            return false;
+        }
+
+        if(getLastNodeLL(first)->next == head)
+            return true;
+        
+        Node *curr, *prev = first;
+        
+         while (curr){  
+
+            prev = prev->next;
+            curr = curr->next;
+            curr = curr ? curr->next : NULL; 
+
+            if ((curr == prev) && curr)
+                return true;    
         }
         
-        int lengthLL = getSizeLL(first);
-        int temp [lengthLL];
-
-        Node *current = head;
-        
-        for (int i=0; i<lengthLL; i++){
-            temp[i] = current->data;
-            current = current->next;
-        }
-
-        current = first;
-
-        for (int i=0; i < lengthLL; i++){
-            current->data = temp[lengthLL-1-i];
-            current = current->next;
-        }
+        return false;        
     }
 
-    void reverseLLPointers(Node *first){
+    void reverseLL(Node *first){
 
         if (isEmptyLL(first)){
             emptyLLMSG();
@@ -227,13 +179,92 @@ namespace myLinkedList{
         Node *temp=head,*prev,*curr = NULL;
 
         while(temp){
-           prev = curr;
-           curr = temp;
-           temp = temp->next;
-           curr->next= prev;
+            prev = curr;
+            curr = temp;
+            temp = temp->next;
+            curr->next= prev;
+            // Break if circular 
+            if (temp == head) 
+                break;
         }
-        head = curr;
-    } 
+        //make it circular after reversing
+        if (temp)
+            head->next = curr;
+
+        head = curr; 
+
+    }
+    
+    void insertNodeLL(Node *first, int index, int value){
+
+        int lengthLL = getSizeLL(first);
+        
+        if (index  > lengthLL || index < 0){
+            cout << "Index is out of Linked List size!\n";
+            return;
+        }
+            
+        Node *temp = new Node; 
+        temp->data = value;
+
+        if (index == 0){
+
+            Node *last = getLastNodeLL(head);
+
+            temp->next = head;
+
+            if (last->next == head)
+                last->next = temp;
+            
+            head = temp;
+            temp = NULL; delete temp;
+        }
+        else{
+            int i=0;
+            for(; i < index-1; i++)
+                first = first->next;
+                
+            temp->next = first->next;
+            first->next = temp;
+        }
+    }
+
+    void deleteNodeLL( Node *first, int index){
+        
+        if (isEmptyLL(first)){
+            emptyLLMSG();
+            return;
+        }
+            
+        if (index <0 || index >= getSizeLL(first)){
+            cout << "Index is out of Linked List size!\n";  
+            return;
+        } 
+        
+        Node *temp = new Node;
+
+        if (index == 0){
+
+            Node *last = getLastNodeLL(head);
+
+            temp = head->next;
+
+            if(last->next == head)
+               last->next = temp; 
+            
+            head = temp;
+            temp = NULL; delete temp;
+        }            
+        else {
+            
+            for (int i=0; i<index-1; i++)
+                first = first->next;
+                       
+            temp = first->next;
+            first->next = temp->next;
+            temp = NULL; delete temp;
+        }     
+    }
 
     Node *concatenateLL(Node *first, Node *second){
 
@@ -306,26 +337,4 @@ namespace myLinkedList{
 
         return merged;           
     }
-
-    bool isCyclicLL(Node *first){
-
-        if (isEmptyLL(first)){
-            emptyLLMSG();
-            return false;
-        }
-        
-        Node *curr, *prev = first;
-        
-         while (curr){  
-            prev = prev->next;
-            curr = curr->next;
-            curr = curr ? curr->next : NULL; 
-
-            if ((curr == prev) && curr)
-                return true;    
-        }
-        
-        return false;        
-    }
-
 }
