@@ -1,14 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-namespace mySingleLinkedList{
+namespace myDoubleLinkedList{
 
     struct Node {
         int data;
-        Node * next;
+        Node *next;
+        Node *previous;
     }*head=NULL;
 
-    
+    void displayNextPreviousLL(Node *first){
+
+        int prev, next =0;
+        while(first){
+
+            prev = first->previous ? first->previous->data : -1;
+            next = first->next ? first->next->data : -1;
+
+            cout << prev  << " -> " << first->data << " -> " << next << " \n";
+
+            first = first->next;
+        }
+    }
+
     void emptyLLMSG(){
         cout << "Empty Linked List!\n";
     }
@@ -16,9 +30,8 @@ namespace mySingleLinkedList{
     bool isEmptyLL(Node *first){
         return first == NULL ? true : false;    
     }
-   
-    
-    int getSizeLL(Node *first ){
+
+    int getSizeLL(Node *first){
 
         if (isEmptyLL(first))
             return 0;
@@ -38,28 +51,30 @@ namespace mySingleLinkedList{
         return count;
     } 
 
-    Node *createLL (vector <int> vec ){
-        
+    Node *createLL(vector<int> vec){
+
         if (!vec.size())
             return NULL;
 
         Node *first, *last, *temp;
+
         first = new Node;
         last = new Node;
-        
+
         first->data = vec[0];
-        first->next = NULL;
+        first->previous = first->next = NULL;
         last = first;
 
-        for(int i=1; i < vec.size(); i++){
+        for(int i = 1; i < vec.size(); i++){
             temp = new Node;
             temp->data = vec[i];
-            temp->next = NULL;
+            temp->next = last->next;
+            temp->previous = last;
             last->next = temp;
             last = temp;
         }
-        
-        return first;
+
+        return first;    
     }
 
     Node *createCircularLL(vector<int> vec){
@@ -67,23 +82,24 @@ namespace mySingleLinkedList{
         Node *linear = createLL(vec);
         Node *circular = linear;
 
-        while (linear->next)
+        while(linear->next)
             linear = linear->next;
         
         linear->next = circular;
-
+        circular->previous = linear;
+        
         return circular;
     }
-    
+
     Node *getLastNodeLL(Node *first){
 
-        while ( (first->next != head) && first->next ) 
+        while( (first->next != head) && first->next )
             first = first->next;
         
         return first;
     }
 
-    void displayLL( Node *first){
+    void displayLL(Node *first){
 
         if(isEmptyLL(first)){
             emptyLLMSG();
@@ -109,7 +125,6 @@ namespace mySingleLinkedList{
         int index=0;
 
         while (first){
-
             if (key == first->data)
                 return index;
 
@@ -177,25 +192,24 @@ namespace mySingleLinkedList{
             return;
         }
 
-        Node *temp=head,*prev,*curr = NULL;
+        Node *temp=head;
 
         while(temp){
-            prev = curr;
-            curr = temp;
-            temp = temp->next;
-            curr->next= prev;
-            // Break if circular 
-            if (temp == head) 
-                break;
-        }
-        //make it circular after reversing
-        if (temp)
-            head->next = curr;
 
-        head = curr; 
+            temp = first->next;
+            first->next = first->previous;
+            first->previous = temp;
+
+            if (!temp || temp == head){
+                head = first;
+                break;
+            }
+                
+            first = first->previous;
+        }
 
     }
-    
+
     void insertNodeLL(Node *first, int index, int value){
 
         int lengthLL = getSizeLL(first);
@@ -207,14 +221,18 @@ namespace mySingleLinkedList{
             
         Node *temp = new Node; 
         temp->data = value;
+         Node *last = getLastNodeLL(head);
 
         if (index == 0){
-            Node *last = getLastNodeLL(head);
 
             temp->next = head;
+            head->previous = temp;
 
-            if (last->next == head)
+            if (last->next == head){
                 last->next = temp;
+                temp->previous = last;
+            }
+                
             
             head = temp;
             temp = NULL; delete temp;
@@ -225,8 +243,12 @@ namespace mySingleLinkedList{
                 first = first->next;
                 
             temp->next = first->next;
+
+            if (last->next == head)
+                first->next->previous = temp;
             first->next = temp;
-        }
+            temp->previous = first;
+        }    
     }
 
     void deleteNodeLL( Node *first, int index){
@@ -248,8 +270,11 @@ namespace mySingleLinkedList{
 
             temp = head->next;
 
-            if(last->next == head)
-               last->next = temp; 
+            if(last->next == head){
+                last->next = temp;
+                temp->previous = last; 
+            }
+               
             
             head = temp;
             temp = NULL; delete temp;
@@ -282,11 +307,12 @@ namespace mySingleLinkedList{
             first = first->next;
         
         first->next = second;
+        second->previous = first;
         
         return concatenated;              
     }
 
-    Node *mergeLL(Node *first, Node *second){
+     Node *mergeLL(Node *first, Node *second){
         
         if(isEmptyLL(first) && isEmptyLL(second)){
             cout << "Empty Linked Lists!\n";
@@ -319,21 +345,28 @@ namespace mySingleLinkedList{
         while(first && second){
             if (first->data < second->data){
                 temp->next = first;
+                first->previous = temp;
                 temp = first;
                 first = first->next;
             }       
             else{
                 temp->next = second;
+                second->previous = temp;
                 temp = second;
                 second = second->next; 
             }            
         } 
         
-        if (!first)
+        if (!first){
             temp->next = second;
-        if (!second)
+            second->previous = temp;
+        }
+            
+        if (!second){
             temp->next = first;
-
+            first->previous = temp;
+        }
+            
         return merged;           
     }
 }
