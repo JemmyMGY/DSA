@@ -1,63 +1,90 @@
 #include <bits/stdc++.h>
 using namespace std;
-# define MAX_SIZE 100
-namespace myStackArray{
-    
-    struct Stack{
-        
-        int top =-1;
-        int array[MAX_SIZE];
-    };
 
-    bool isEmpty(Stack stk){
-        return stk.top == -1;
+template<class T>
+class myStackArray {
+    private:
+        int size, top;
+        T *array;
+    public:
+        myStackArray(){
+            this->size =10;
+            this->top =-1;
+            this->array = new T[this->size];
+        }
+        myStackArray(int size){
+            this->size = size;
+            this->top = -1;
+            this->array = new T[this->size];
+        }
+
+        
+        bool isEmpty();
+        bool isFull();
+        void push(T value);
+        T pop();
+        T getTop();
+        int getSize();
+        void display();
+};
+
+    template <class T>
+    bool myStackArray<T>::isEmpty(){
+            return this->top == -1;
     }
 
-    bool isFull(Stack stk){
-        return stk.top == MAX_SIZE-1;
+    template <class T>
+    bool myStackArray<T>::isFull(){
+        return this->top == this->size-1;
     }
 
-    void push(Stack &stk, int value){
+    template <class T>
+    void myStackArray<T>::push(T value){
         
-        if( isFull(stk) ){
+        if( isFull() ){
             cout << "Stack Overflow!\n";
             return;
         }
 
-        stk.array[++stk.top] = value;
+        this->array[++this->top] = value;
     }
 
-    int pop(Stack &stk){
+    template <class T>
+    T myStackArray<T>::pop(){
         
-        if(isEmpty(stk)){
+        if(isEmpty()){
             cout << "Stack Underflow!\n";
             return -1;
         }
 
-        return stk.array[stk.top--];
+        return this->array[this->top--];
     }
 
-    int getTop(Stack stk){
-        
-        if (isEmpty(stk)){
+    template <class T>
+    T myStackArray<T>::getTop(){
+
+        if (isEmpty()){
             cout << "Stack is Empty!\n";
             return -1;       
         }
 
-        return stk.array[stk.top];
+        return this->array[this->top];
     }
 
-    int getSize(Stack stk){
-        return ++stk.top;
+    template <class T> 
+    int myStackArray<T>::getSize(){
+        return this->top+1;
     }
 
+    template <class T>
+    void myStackArray<T>::display(){
 
+        if(isEmpty()){
+            cout << "Empty Stack!\n";
+            return;
+        }    
 
-
-
-
-
-
-
-
-} // namespace myStackArr
+        for(int i=0; i <= this->top; i++)
+            cout << this->array[i] << " ";
+        cout <<endl;    
+    }
