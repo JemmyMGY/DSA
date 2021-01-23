@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include "single_linked_list.h"
 #include "double_linked_list.h"
+#include "stack_array.h"
 using namespace std;
 
 void starter(){
@@ -13,7 +14,32 @@ int main(){
     
     starter();
     
-    vector<int> v1 {2,8,10,11};
+
+    // stack testing 
+
+    myStackArray::Stack stk;
+
+    cout << myStackArray::isEmpty(stk) <<endl;
+    myStackArray::push(stk, 55);
+    myStackArray::push(stk, 60);
+    myStackArray::push(stk, 80);
+    cout << myStackArray::isEmpty(stk) <<endl;
+
+    cout << myStackArray::getSize(stk) <<endl;
+
+    cout << myStackArray::pop(stk) <<endl;
+    cout << myStackArray::pop(stk) <<endl;
+    cout << myStackArray::pop(stk) <<endl;
+
+    cout << myStackArray::getSize(stk) <<endl;
+
+
+
+
+    // Linked List testing 
+
+
+   /*  vector<int> v1 {2,8,10,11};
     vector<int> v2 {3,5,7};
     vector <int> v { 10,20,50,80 };
     
@@ -21,16 +47,17 @@ int main(){
     mySingleLinkedList::Node *lls2 = mySingleLinkedList::createLL(v2);
 
     myDoubleLinkedList::Node *lld1 = myDoubleLinkedList::createLL(v1);
-    myDoubleLinkedList::Node *lld2 = myDoubleLinkedList::createLL(v2);
+    myDoubleLinkedList::Node *lld2 = myDoubleLinkedList::createLL(v2); */
     
     /*mySingleLinkedList::head = mySingleLinkedList::createCircularLL(v);
     mySingleLinkedList::displayLL(mySingleLinkedList::head);*/
     
-
-
-    myDoubleLinkedList::Node * merged = myDoubleLinkedList::mergeLL(lld1, lld2);
+   /*  myDoubleLinkedList::head = myDoubleLinkedList::createLL(v);
+    cout << myDoubleLinkedList::getLastNodeLL(myDoubleLinkedList::head)->data <<endl;
+ */
+    /* myDoubleLinkedList::Node * merged = myDoubleLinkedList::mergeLL(lld1, lld2);
     myDoubleLinkedList::displayLL(merged);
-    myDoubleLinkedList::displayNextPreviousLL(merged);
+    myDoubleLinkedList::displayNextPreviousLL(merged); */
 
     /* myDoubleLinkedList::Node * concatenated = myDoubleLinkedList::concatenateLL(lld1, lld2);
     myDoubleLinkedList::displayLL(concatenated);

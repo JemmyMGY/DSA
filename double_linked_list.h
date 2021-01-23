@@ -93,7 +93,9 @@ namespace myDoubleLinkedList{
 
     Node *getLastNodeLL(Node *first){
 
-        while( (first->next != head) && first->next )
+        if (first->previous)
+            return first->previous;
+        while(first->next)
             first = first->next;
         
         return first;
@@ -107,6 +109,7 @@ namespace myDoubleLinkedList{
         }
             
         while(first){
+
             cout << first->data << " " ;
 
             if(first->next == head)
@@ -369,4 +372,4 @@ namespace myDoubleLinkedList{
             
         return merged;           
     }
-}
+} // namespace myDoubleLinkedList
