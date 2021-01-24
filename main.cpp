@@ -38,9 +38,17 @@ int main(){
     cout << stak.isFull() <<endl;
      */
 
-    vector<int> v{1,2,5,10};
-    mySingleLinkedList<int> LL(v, true);
-    LL.display();
+    vector<int> v1{2,8,10,11};
+    vector<int> v2{};
+    mySingleLinkedList<int> LL1(v1);
+    mySingleLinkedList<int> LL2(v2);
+
+    
+    mySingleLinkedList<int> conc = LL1.merge(LL2);
+    
+    conc.display();
+    
+    
     /* LL.~mySingleLinkedList();
     cout << LL.getSize() << endl; */
 

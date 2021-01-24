@@ -6,18 +6,15 @@ class myStackArray {
     private:
         int size, top;
         T *array;
+        void clearStack();
     public:
         myStackArray(){
             this->size =10;
             this->top =-1;
             this->array = new T[this->size];
         }
-        myStackArray(int size){
-            this->size = size;
-            this->top = -1;
-            this->array = new T[this->size];
-        }
-
+        myStackArray(int size);
+        ~myStackArray();
         
         bool isEmpty();
         bool isFull();
@@ -27,6 +24,26 @@ class myStackArray {
         int getSize();
         void display();
 };
+
+
+    template <class T>
+    myStackArray<T>::myStackArray(int size){
+            this->size = size;
+            this->top = -1;
+            this->array = new T[this->size];
+    }
+
+    template<class T>
+    myStackArray<T>::~myStackArray(){
+        clearStack();
+    }
+
+    template <class T>
+    void myStackArray<T>::clearStack(){
+        
+        while (this->top > -1)
+            --this->top;
+    }
 
     template <class T>
     bool myStackArray<T>::isEmpty(){

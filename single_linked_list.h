@@ -6,7 +6,7 @@ class NodeSLL{
     public:
         T data;
         NodeSLL* next;
-        
+        void display();    
 };
 
 template <class T>
@@ -30,11 +30,8 @@ class mySingleLinkedList{
         void reverse();
         void insertNode(int index, T value);
         void deleteNode(int index);
-        NodeSLL<T> *concatenate(mySingleLinkedList<T> secondLL);
-        NodeSLL<T> *merge(mySingleLinkedList<T> secondLL);
-
-
-
+        mySingleLinkedList<T> concatenate(mySingleLinkedList<T> secondLL);
+        mySingleLinkedList<T> merge(mySingleLinkedList<T> secondLL);
 
 };
 
@@ -42,8 +39,6 @@ class mySingleLinkedList{
     void emptyLLMSG(){
         cout << "Empty Linked List!\n";
     }
-
-
 
     template <class T>
     mySingleLinkedList<T>::mySingleLinkedList(vector<T> vec, bool circular){
@@ -158,7 +153,6 @@ class mySingleLinkedList{
         }
     }
 
-
     template <class T>
     NodeSLL<T>* mySingleLinkedList<T>::getLastNode(){
 
@@ -227,7 +221,6 @@ class mySingleLinkedList{
         return false;        
     }
 
-
     template <class T>
     void mySingleLinkedList<T>::reverse(){
         
@@ -289,6 +282,7 @@ class mySingleLinkedList{
             first->next = temp;
         }
     }
+
     template <class T>
     void mySingleLinkedList<T>::deleteNode(int index){
         
@@ -326,91 +320,87 @@ class mySingleLinkedList{
         temp = NULL;delete temp;    
     }
 
-
     template <class T>
-    NodeSLL<T>* mySingleLinkedList<T>::concatenate(mySingleLinkedList<T> secondLL){
+    mySingleLinkedList<T> mySingleLinkedList<T>::concatenate(mySingleLinkedList<T> secondLL){
         
+        mySingleLinkedList<T> concatenated;
+
         if(this->isEmpty() &&  secondLL.isEmpty() ){
             cout << "Empty Linked Lists!\n";
-            return NULL; 
+            return concatenated; 
         }
 
         if (this->isEmpty())
             return secondLL;
         if (secondLL.isEmpty())
-            return this->head;
+            return *this;    
+        
 
         NodeSLL<T>* first = this->head;
-        NodeSLL<T>* concatenated = first;
+        concatenated.head = first;
 
         while(first->next)
             first = first->next;
         
-        first->next = secondLL->head;
+        first->next = secondLL.head;
         
         return concatenated;              
     }
+
     template <class T>
-    NodeSLL<T>* mySingleLinkedList<T>::merge(mySingleLinkedList<T> secondLL){
+    mySingleLinkedList<T> mySingleLinkedList<T>::merge(mySingleLinkedList<T> secondLL){
         
-        if(this->isEmpty() && secondLL->isEmpty()){
+        mySingleLinkedList<T> merged;
+        
+        if(this->isEmpty() && secondLL.isEmpty()){
             cout << "Empty Linked Lists!\n";
-            return NULL; 
+            return merged; 
+        }
+
+        if ( !this->isSorted() && !secondLL.isSorted()){
+            cout << "Merging requires 2 sorted Linked Lists!\n";
+            return merged;
         }
         
         if (this->isEmpty())
-            return secondLL->head;
+            return secondLL;
         if (secondLL.isEmpty())
-            return this->head;
+            return *this;
 
-        if ( !this->isSorted() && !secondLL->isSorted()){
-            cout << "Merging requires 2 sorted Linked Lists!\n";
-            return NULL;
-        }
+        
 
         NodeSLL<T>* first = this->head; 
-        NodeSLL<T>* merged = NULL;
+        merged.head = NULL;
 
-        if (first->data < secondLL->head->data){
-            merged = first;
+        if (first->data < secondLL.head->data){
+            merged.head = first;
             first = first->next;
         }   
         else{
-            merged = secondLL->head;
-            secondLL->head= secondLL->head->next;
+            merged.head = secondLL.head;
+            secondLL.head= secondLL.head->next;
         }
 
-        NodeSLL<T>* temp = merged;      
+        NodeSLL<T>* temp = merged.head;      
         
-        while(first && secondLL->head ){
-            if (first->data < secondLL->head->data){
+        while(first && secondLL.head ){
+            if (first->data < secondLL.head->data){
                 temp->next = first;
                 temp = first;
                 first = first->next;
             }       
             else{
-                temp->next = secondLL->head;
-                temp = secondLL->head;
-                secondLL->head = secondLL->head->next; 
+                temp->next = secondLL.head;
+                temp = secondLL.head;
+                secondLL.head = secondLL.head->next; 
             }            
         } 
         
         if (!first)
-            temp->next = secondLL->head;
-        if (!secondLL->head)
+            temp->next = secondLL.head;
+        if (!secondLL.head)
             temp->next = first;
 
         return merged;           
     }
-
-
-
-
-
-
-
-
-
-
-
 
