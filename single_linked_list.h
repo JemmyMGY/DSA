@@ -1,28 +1,78 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-namespace mySingleLinkedList{
+template <class T>
+class NodeSLL{
+    public:
+        T data;
+        NodeSLL* next;
+        
+};
 
-    struct Node {
-        int data;
-        Node * next;
-    }*head=NULL;
+template <class T>
+class mySingleLinkedList{
+    private:
+        NodeSLL<T>* head;
+        void deleteLL();
+        NodeSLL<T>* createLL(vector<T> vec);
+        NodeSLL<T>* createCircularLL(vector<T> vec);
+    public:
+        mySingleLinkedList(){this->head = NULL;}
+        mySingleLinkedList(vector<T> vec, bool circular = false);
+        ~mySingleLinkedList();  
 
-    
+        bool isEmpty();
+        int getSize();
+        void display();
+        NodeSLL<T> *getLastNode();
+        bool isSorted();
+        bool isCyclic();
+        void reverse();
+        void insertNode(int index, T value);
+        void deleteNode(int index);
+        NodeSLL<T> *concatenate(mySingleLinkedList<T> secondLL);
+        NodeSLL<T> *merge(mySingleLinkedList<T> secondLL);
+
+
+
+
+};
+
+
     void emptyLLMSG(){
         cout << "Empty Linked List!\n";
     }
-  
-    bool isEmptyLL(Node *first){
-        return first == NULL ? true : false;    
-    }
-   
-    
-    int getSizeLL(Node *first ){
 
-        if (isEmptyLL(first))
-            return 0;
+
+
+    template <class T>
+    mySingleLinkedList<T>::mySingleLinkedList(vector<T> vec, bool circular){
+       
+        if(circular)
+            this->head = createCircularLL(vec);
+        else
+            this->head = createLL(vec);    
+    }
+    
+    template <class T>
+    mySingleLinkedList<T>::~mySingleLinkedList(){      
+        deleteLL();
+    }
+    
+
+// functions 
+    template <class T>
+    bool mySingleLinkedList<T>::isEmpty(){
+        return this->head == NULL ? true : false;    
+    }
+
+    template <class T>
+    int mySingleLinkedList<T>::getSize(){
         
+        NodeSLL<T>* first = this->head;
+
+        if (this->isEmpty())
+            return 0;
         
         int count=0;
 
@@ -36,23 +86,43 @@ namespace mySingleLinkedList{
         }   
         
         return count;
-    } 
+    }
 
-    Node *createLL (vector <int> vec ){
+    template <class T>
+    void mySingleLinkedList<T>::display(){
+
+        if(isEmpty()){
+            emptyLLMSG();
+            return;
+        }
+
+        NodeSLL<T>* first = this->head;
+
+        while(first){
+            cout << first->data << " " ;
+
+            if(first->next == this->head)
+                break;
+
+            first = first->next;
+        }
+        cout << endl;  
+    }
+
+    template <class T>
+    NodeSLL<T>* mySingleLinkedList<T>::createLL(vector <T> vec ){
         
         if (!vec.size())
             return NULL;
 
-        Node *first, *last, *temp;
-        first = new Node;
-        last = new Node;
+        NodeSLL<T>* first =new  NodeSLL<T>;
+        NodeSLL<T>* last =first ;
         
         first->data = vec[0];
         first->next = NULL;
-        last = first;
-
+    
         for(int i=1; i < vec.size(); i++){
-            temp = new Node;
+            NodeSLL<T>* temp = new NodeSLL<T>;
             temp->data = vec[i];
             temp->next = NULL;
             last->next = temp;
@@ -62,81 +132,65 @@ namespace mySingleLinkedList{
         return first;
     }
 
-    Node *createCircularLL(vector<int> vec){
+    template <class T>
+    NodeSLL<T>* mySingleLinkedList<T>::createCircularLL(vector<T> vec){
 
-        Node *linear = createLL(vec);
-        Node *circular = linear;
+        NodeSLL<T>* circular =   createLL(vec); 
+        NodeSLL<T>* linear =  circular;
 
         while (linear->next)
             linear = linear->next;
         
         linear->next = circular;
-
+    
         return circular;
     }
-    
-    Node *getLastNodeLL(Node *first){
 
-        while ( (first->next != head) && first->next ) 
+    template <class T>
+    void mySingleLinkedList<T>::deleteLL(){
+
+        NodeSLL<T>* eraser = this->head;
+
+        while(this->head){
+            this->head = this->head->next;
+            eraser=NULL;delete eraser;
+            eraser = this->head;
+        }
+    }
+
+
+    template <class T>
+    NodeSLL<T>* mySingleLinkedList<T>::getLastNode(){
+
+        if(isEmpty()){
+            emptyLLMSG();
+            return NULL;
+        }
+
+        NodeSLL<T> *first = this->head;
+
+        while ( (first->next != this->head) && first->next ) 
             first = first->next;
         
         return first;
     }
 
-    void displayLL( Node *first){
-
-        if(isEmptyLL(first)){
-            emptyLLMSG();
-            return;
-        }
-            
-        while(first){
-            cout << first->data << " " ;
-
-            if(first->next == head)
-                break;
-
-            first = first->next;
-        }
-        cout << endl;  
-    }
-
-    int searchNodeLL(Node *first, int key){
-
-        if (isEmptyLL(first))
-            return -1;
+    template <class T>
+    bool mySingleLinkedList<T>::isSorted(){
         
-        int index=0;
-
-        while (first){
-
-            if (key == first->data)
-                return index;
-
-            index++;
-
-            if (first->next == head)
-                break;
-
-            first = first->next;    
-        }
-        
-        return -1;   
-    }
-
-    bool isSortedLL(Node *first){
-    
-        if (isEmptyLL(first)){
+        if (this->isEmpty()){
             emptyLLMSG();
             return false;
         }
 
-        int lengthLL = getSizeLL(first);
+        NodeSLL<T> *first = this->head;
+
+        int lengthLL = this->getSize();
 
         for (int i=0; i < lengthLL-1; i++){
             if (first->data > (first->next)->data)
                 return false;
-            if (first->next == head)
+            if (first->next == this->head)
                 break;
             
             first = first->next;    
@@ -144,18 +198,21 @@ namespace mySingleLinkedList{
         
         return true;
     }
-
-    bool isCyclicLL(Node *first){
-
-        if (isEmptyLL(first)){
+    
+    template <class T>
+    bool mySingleLinkedList<T>::isCyclic(){
+        
+        if (isEmpty()){
             emptyLLMSG();
             return false;
         }
 
-        if(getLastNodeLL(first)->next == head)
+        NodeSLL<T> *first = this->head;
+
+        if(this->getLastNode()->next == this->head)
             return true;
         
-        Node *curr, *prev = first;
+        NodeSLL<T> *curr, *prev = first;
         
          while (curr){  
 
@@ -170,14 +227,16 @@ namespace mySingleLinkedList{
         return false;        
     }
 
-    void reverseLL(Node *first){
 
-        if (isEmptyLL(first)){
+    template <class T>
+    void mySingleLinkedList<T>::reverse(){
+        
+        if (this->isEmpty()){
             emptyLLMSG();
             return;
         }
 
-        Node *temp=head,*prev,*curr = NULL;
+        NodeSLL<T> *temp=this->head,*prev,*curr = NULL;
 
         while(temp){
             prev = curr;
@@ -185,39 +244,41 @@ namespace mySingleLinkedList{
             temp = temp->next;
             curr->next= prev;
             // Break if circular 
-            if (temp == head) 
+            if (temp == this->head) 
                 break;
         }
         //make it circular after reversing
         if (temp)
-            head->next = curr;
+            this->head->next = curr;
 
-        head = curr; 
-
+        this->head = curr; 
     }
-    
-    void insertNodeLL(Node *first, int index, int value){
 
-        int lengthLL = getSizeLL(first);
+    template <class T>
+    void mySingleLinkedList<T>::insertNode(int index, T value){
+         
+        int lengthLL = getSize();
         
         if (index  > lengthLL || index < 0){
             cout << "Index is out of Linked List size!\n";
             return;
         }
-            
-        Node *temp = new Node; 
+        
+        NodeSLL<T>*first = this->head; 
+        NodeSLL<T> *temp = new NodeSLL<T>; 
         temp->data = value;
-
+        
         if (index == 0){
-            Node *last = getLastNodeLL(head);
+            
+            NodeSLL<T> *last = getLastNode();
 
-            temp->next = head;
+            temp->next = this->head;
 
-            if (last->next == head)
+            if (last->next == this->head)
                 last->next = temp;
             
-            head = temp;
-            temp = NULL; delete temp;
+            this->head = temp;
+            temp=NULL; delete temp;
         }
         else{
             
@@ -228,31 +289,31 @@ namespace mySingleLinkedList{
             first->next = temp;
         }
     }
-
-    void deleteNodeLL( Node *first, int index){
+    template <class T>
+    void mySingleLinkedList<T>::deleteNode(int index){
         
-        if (isEmptyLL(first)){
+        if (isEmpty()){
             emptyLLMSG();
             return;
         }
             
-        if (index <0 || index >= getSizeLL(first)){
+        if (index <0 || index >= getSize()){
             cout << "Index is out of Linked List size!\n";  
             return;
         } 
         
-        Node *temp = new Node;
+         NodeSLL<T>* temp = new NodeSLL<T>;
+         NodeSLL<T>* first = this->head;
 
         if (index == 0){
-            Node *last = getLastNodeLL(head);
+             NodeSLL<T>* last = getLastNode();
 
-            temp = head->next;
+            temp = this->head->next;
 
-            if(last->next == head)
+            if(last->next == this->head)
                last->next = temp; 
             
-            head = temp;
-            temp = NULL; delete temp;
+            this->head = temp;
         }            
         else {
             for (int i=0; i<index-1; i++)
@@ -260,80 +321,96 @@ namespace mySingleLinkedList{
                        
             temp = first->next;
             first->next = temp->next;
-            temp = NULL; delete temp;
-        }     
+        }
+
+        temp = NULL;delete temp;    
     }
 
-    Node *concatenateLL(Node *first, Node *second){
 
-        if(isEmptyLL(first) && isEmptyLL(second)){
+    template <class T>
+    NodeSLL<T>* mySingleLinkedList<T>::concatenate(mySingleLinkedList<T> secondLL){
+        
+        if(this->isEmpty() &&  secondLL.isEmpty() ){
             cout << "Empty Linked Lists!\n";
             return NULL; 
         }
 
-        if (isEmptyLL(first))
-            return second;
-        if (isEmptyLL(second))
-            return first;
-       
-        Node *concatenated = first;
+        if (this->isEmpty())
+            return secondLL;
+        if (secondLL.isEmpty())
+            return this->head;
+
+        NodeSLL<T>* first = this->head;
+        NodeSLL<T>* concatenated = first;
 
         while(first->next)
             first = first->next;
         
-        first->next = second;
+        first->next = secondLL->head;
         
         return concatenated;              
     }
-
-    Node *mergeLL(Node *first, Node *second){
+    template <class T>
+    NodeSLL<T>* mySingleLinkedList<T>::merge(mySingleLinkedList<T> secondLL){
         
-        if(isEmptyLL(first) && isEmptyLL(second)){
+        if(this->isEmpty() && secondLL->isEmpty()){
             cout << "Empty Linked Lists!\n";
             return NULL; 
         }
         
-        if (isEmptyLL(first))
-            return second;
-        if (isEmptyLL(second))
-            return first;
-        
-        if ( !isSortedLL(first) && !isSortedLL(second)){
+        if (this->isEmpty())
+            return secondLL->head;
+        if (secondLL.isEmpty())
+            return this->head;
+
+        if ( !this->isSorted() && !secondLL->isSorted()){
             cout << "Merging requires 2 sorted Linked Lists!\n";
             return NULL;
         }
 
-        Node *merged = new Node;
-        
-        if (first->data < second->data){
+        NodeSLL<T>* first = this->head; 
+        NodeSLL<T>* merged = NULL;
+
+        if (first->data < secondLL->head->data){
             merged = first;
             first = first->next;
         }   
         else{
-            merged = second;
-            second= second->next;
+            merged = secondLL->head;
+            secondLL->head= secondLL->head->next;
         }
 
-        Node *temp = merged;      
+        NodeSLL<T>* temp = merged;      
         
-        while(first && second){
-            if (first->data < second->data){
+        while(first && secondLL->head ){
+            if (first->data < secondLL->head->data){
                 temp->next = first;
                 temp = first;
                 first = first->next;
             }       
             else{
-                temp->next = second;
-                temp = second;
-                second = second->next; 
+                temp->next = secondLL->head;
+                temp = secondLL->head;
+                secondLL->head = secondLL->head->next; 
             }            
         } 
         
         if (!first)
-            temp->next = second;
-        if (!second)
+            temp->next = secondLL->head;
+        if (!secondLL->head)
             temp->next = first;
 
         return merged;           
     }
-} // namespace mySingleLinkedList
+
+
+
+
+
+
+
+
+
+
+
+

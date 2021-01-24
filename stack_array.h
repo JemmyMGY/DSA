@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<class T>
+template <class T>
 class myStackArray {
     private:
         int size, top;
