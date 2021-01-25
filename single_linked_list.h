@@ -5,8 +5,7 @@ template <class T>
 class NodeSLL{
     public:
         T data;
-        NodeSLL* next;
-        void display();    
+        NodeSLL* next; 
 };
 
 template <class T>
@@ -148,7 +147,7 @@ class mySingleLinkedList{
 
         while(this->head){
             this->head = this->head->next;
-            eraser=NULL;delete eraser;
+            delete eraser;
             eraser = this->head;
         }
     }
@@ -257,13 +256,13 @@ class mySingleLinkedList{
             return;
         }
         
-        NodeSLL<T>*first = this->head; 
-        NodeSLL<T> *temp = new NodeSLL<T>; 
+        NodeSLL<T>* first = this->head; 
+        NodeSLL<T>* temp = new NodeSLL<T>; 
         temp->data = value;
         
         if (index == 0){
             
-            NodeSLL<T> *last = getLastNode();
+            NodeSLL<T>* last = getLastNode();
 
             temp->next = this->head;
 
@@ -271,7 +270,6 @@ class mySingleLinkedList{
                 last->next = temp;
             
             this->head = temp;
-            temp=NULL; delete temp;
         }
         else{
             
@@ -302,12 +300,12 @@ class mySingleLinkedList{
         if (index == 0){
              NodeSLL<T>* last = getLastNode();
 
-            temp = this->head->next;
+            temp = this->head;
 
             if(last->next == this->head)
-               last->next = temp; 
+               last->next = this->head->next; 
             
-            this->head = temp;
+            this->head = this->head->next;
         }            
         else {
             for (int i=0; i<index-1; i++)
@@ -317,7 +315,7 @@ class mySingleLinkedList{
             first->next = temp->next;
         }
 
-        temp = NULL;delete temp;    
+        delete temp;
     }
 
     template <class T>

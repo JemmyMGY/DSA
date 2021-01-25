@@ -37,16 +37,21 @@ int main(){
     cout << stak.getTop() <<endl;
     cout << stak.isFull() <<endl;
      */
-
+    vector<int> v{15,20,50,60};
     vector<int> v1{2,8,10,11};
     vector<int> v2{};
+
+    mySingleLinkedList<int> LL(v);
     mySingleLinkedList<int> LL1(v1);
     mySingleLinkedList<int> LL2(v2);
 
     
-    mySingleLinkedList<int> conc = LL1.merge(LL2);
-    
-    conc.display();
+
+    LL.deleteNode(0);
+    LL.insertNode(1,80);
+    LL.display();
+    /* mySingleLinkedList<int> conc = LL1.merge(LL2);
+    conc.display(); */
     
     
     /* LL.~mySingleLinkedList();
