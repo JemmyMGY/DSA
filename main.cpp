@@ -90,6 +90,7 @@ int main(){
     stk.push('d');
 
     cout << stk.getTop() <<endl;
+    cout << stk.pop() <<endl;
     stk.display();
     cout << stk.getSize() <<endl;
     cout << stk.isEmpty() <<endl;

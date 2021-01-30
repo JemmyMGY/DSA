@@ -53,7 +53,6 @@ class myStackLL{
         return newNode == NULL ? 1 : 0;
     }
 
-
     template<class T>
     void myStackLL<T>::push(T value) {
 
@@ -72,15 +71,17 @@ class myStackLL{
     template<class T>
     T myStackLL<T>::pop() {
 
+        T topData;
+
         if(isEmpty()){
             cout << "Stack underflow!\n";
-            return;
+            return topData;
         }
 
         common::NodeSLL<T>* temp = top;
         top = top->next;
 
-        T topData;
+
         topData = temp->data;
         delete temp;
 
