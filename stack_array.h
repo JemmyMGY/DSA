@@ -9,9 +9,9 @@ class myStackArray {
         void clearStack();
     public:
         myStackArray(){
-            this->size =10;
-            this->top =-1;
-            this->array = new T[this->size];
+            size =10;
+            top =-1;
+            array = new T[size];
         }
         myStackArray(int size);
         ~myStackArray();
@@ -29,8 +29,8 @@ class myStackArray {
     template <class T>
     myStackArray<T>::myStackArray(int size){
             this->size = size;
-            this->top = -1;
-            this->array = new T[this->size];
+            top = -1;
+            array = new T[this->size];
     }
 
     template<class T>
@@ -41,18 +41,18 @@ class myStackArray {
     template <class T>
     void myStackArray<T>::clearStack(){
         
-        while (this->top > -1)
-            --this->top;
+        while (top > -1)
+            --top;
     }
 
     template <class T>
     bool myStackArray<T>::isEmpty(){
-            return this->top == -1;
+            return top == -1;
     }
 
     template <class T>
     bool myStackArray<T>::isFull(){
-        return this->top == this->size-1;
+        return top == size-1;
     }
 
     template <class T>
@@ -63,7 +63,7 @@ class myStackArray {
             return;
         }
 
-        this->array[++this->top] = value;
+        array[++top] = value;
     }
 
     template <class T>
@@ -71,26 +71,28 @@ class myStackArray {
         
         if(isEmpty()){
             cout << "Stack Underflow!\n";
-            return -1;
+            T empty;
+            return empty;
         }
 
-        return this->array[this->top--];
+        return array[top--];
     }
 
     template <class T>
     T myStackArray<T>::getTop(){
 
         if (isEmpty()){
-            cout << "Stack is Empty!\n";
-            return -1;       
+            common::emptyStackMSG();
+            T empty;
+            return empty;
         }
 
-        return this->array[this->top];
+        return array[top];
     }
 
     template <class T> 
     int myStackArray<T>::getSize(){
-        return this->top+1;
+        return top+1;
     }
 
     template <class T>
@@ -101,7 +103,7 @@ class myStackArray {
             return;
         }    
 
-        for(int i=0; i <= this->top; i++)
-            cout << this->array[i] << " ";
-        cout <<endl;    
+        for(int i=top; i >= 0; i--)
+            cout << array[i] << " ";
+        cout <<"\n";
     }

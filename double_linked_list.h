@@ -1,42 +1,60 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-namespace myDoubleLinkedList{
 
-    struct Node {
-        int data;
-        Node *next;
-        Node *previous;
-    }*head=NULL;
+template <class T>
+class myDoubleLinkedList{
+    private:
+        common::NodeDLL<T>* head;
+        void deleteLL();
+        common::NodeDLL<T>* createLL(vector<T> vec);
+        common::NodeDLL<T>* createCircularLL(vector<T> vec);
+    public:
+        myDoubleLinkedList(){head = NULL;}
+        myDoubleLinkedList(vector<T> vec, bool circular = false);
+        ~myDoubleLinkedList();
 
-    void displayNextPreviousLL(Node *first){
+        bool isEmpty();
+        int getSize();
+        void display();
+        common::NodeDLL<T> *getLastNode();
+        bool isSorted();
+        bool isCyclic();
+        void reverse();
+        void insertNode(int index, T value);
+        void deleteNode(int index);
+        int searchNode(T key);
+        myDoubleLinkedList<T> concatenate(myDoubleLinkedList<T> secondLL);
+        myDoubleLinkedList<T> merge(myDoubleLinkedList<T> secondLL);
+    
+};
 
-        int prev, next =0;
-        while(first){
-
-            prev = first->previous ? first->previous->data : -1;
-            next = first->next ? first->next->data : -1;
-
-            cout << prev  << " -> " << first->data << " -> " << next << " \n";
-
-            first = first->next;
-        }
+    template <class T>
+    myDoubleLinkedList<T>::myDoubleLinkedList(vector<T> vec, bool circular){
+        if(circular)
+            head = createCircularLL(vec);
+        else
+            head = createLL(vec);
     }
 
-    void emptyLLMSG(){
-        cout << "Empty Linked List!\n";
-    }
-  
-    bool isEmptyLL(Node *first){
-        return first == NULL ? true : false;    
+    template <class T>
+    myDoubleLinkedList<T>::~myDoubleLinkedList(){
+        deleteLL();
     }
 
-    int getSizeLL(Node *first){
 
-        if (isEmptyLL(first))
+    template <class T>
+    bool myDoubleLinkedList<T>::isEmpty(){
+        return head == NULL ? 1 : 0;
+    }
+
+    template <class T>
+    int myDoubleLinkedList<T>::getSize(){
+
+        if (isEmpty())
             return 0;
         
-        
+        common::NodeDLL<T>* first = head;
         int count=0;
 
         while (first){
@@ -51,63 +69,16 @@ namespace myDoubleLinkedList{
         return count;
     } 
 
-    Node *createLL(vector<int> vec){
+    template <class T>
+    void myDoubleLinkedList<T>::display(){
 
-        if (!vec.size())
-            return NULL;
-
-        Node *first, *last, *temp;
-
-        first = new Node;
-        last = new Node;
-
-        first->data = vec[0];
-        first->previous = first->next = NULL;
-        last = first;
-
-        for(int i = 1; i < vec.size(); i++){
-            temp = new Node;
-            temp->data = vec[i];
-            temp->next = last->next;
-            temp->previous = last;
-            last->next = temp;
-            last = temp;
-        }
-
-        return first;    
-    }
-
-    Node *createCircularLL(vector<int> vec){
-
-        Node *linear = createLL(vec);
-        Node *circular = linear;
-
-        while(linear->next)
-            linear = linear->next;
-        
-        linear->next = circular;
-        circular->previous = linear;
-        
-        return circular;
-    }
-
-    Node *getLastNodeLL(Node *first){
-
-        if (first->previous)
-            return first->previous;
-        while(first->next)
-            first = first->next;
-        
-        return first;
-    }
-
-    void displayLL(Node *first){
-
-        if(isEmptyLL(first)){
-            emptyLLMSG();
+        if(isEmpty()){
+            common::emptyLLMSG();
             return;
         }
-            
+
+        common::NodeDLL<T>* first = head;
+
         while(first){
 
             cout << first->data << " " ;
@@ -120,36 +91,87 @@ namespace myDoubleLinkedList{
         cout << endl;  
     }
 
-    int searchNodeLL(Node *first, int key){
+    template <class T>
+    common::NodeDLL<T>* myDoubleLinkedList<T>::createLL(vector<T> vec){
 
-        if (isEmptyLL(first))
-            return -1;
-        
-        int index=0;
+        if (!vec.size())
+            return NULL;
 
-        while (first){
-            if (key == first->data)
-                return index;
+        common::NodeDLL<T>* first = new common::NodeDLL<T>;
+        common::NodeDLL<T>* last = first;
 
-            index++;
+        first->data = vec[0];
+        first->previous = first->next = NULL;
 
-            if (first->next == head)
-                break;
-
-            first = first->next;    
+        for(int i = 1; i < vec.size(); i++){
+            common::NodeDLL<T>* temp = new common::NodeDLL<T>;
+            temp->data = vec[i];
+            temp->next = last->next;
+            temp->previous = last;
+            last->next = temp;
+            last = temp;
         }
-        
-        return -1;   
+
+        return first;    
     }
 
-    bool isSortedLL(Node *first){
+    template <class T>
+    common::NodeDLL<T>* myDoubleLinkedList<T>::createCircularLL(vector<T> vec){
+
+        common::NodeDLL<T>* linear = createLL(vec);
+        common::NodeDLL<T>* circular = linear;
+
+        while(linear->next)
+            linear = linear->next;
+        
+        linear->next = circular;
+        circular->previous = linear;
+        
+        return circular;
+    }
     
-        if (isEmptyLL(first)){
-            emptyLLMSG();
+    template <class T>
+    void myDoubleLinkedList<T>::deleteLL(){
+
+        common::NodeDLL<T>* eraser = head;
+
+        while(head){
+            head = head->next;
+            delete eraser;
+            eraser = head;
+        }
+    }
+
+    template <class T>
+    common::NodeDLL<T>* myDoubleLinkedList<T>::getLastNode(){
+        
+        if(isEmpty()){
+            common::emptyLLMSG();
+            return NULL;
+        }
+        
+        common::NodeDLL<T>* first = head;
+
+        if (first->previous)
+            return first->previous;
+        
+        while(first->next)
+            first = first->next;
+        
+        return first;
+    }
+
+
+    template <class T>
+    bool myDoubleLinkedList<T>::isSorted(){
+        
+        if (isEmpty()){
+            common::emptyLLMSG();
             return false;
         }
 
-        int lengthLL = getSizeLL(first);
+        common::NodeDLL<T>* first = head;
+        int lengthLL = getSize();
 
         for (int i=0; i < lengthLL-1; i++){
             if (first->data > (first->next)->data)
@@ -162,18 +184,20 @@ namespace myDoubleLinkedList{
         
         return true;
     }
-
-    bool isCyclicLL(Node *first){
-
-        if (isEmptyLL(first)){
-            emptyLLMSG();
+    
+    template <class T>
+    bool myDoubleLinkedList<T>::isCyclic(){
+        
+        if (isEmpty()){
+            common::emptyLLMSG();
             return false;
         }
 
-        if(getLastNodeLL(first)->next == head)
+        if(getLastNode()->next == head)
             return true;
         
-        Node *curr, *prev = first;
+        common::NodeSLL<T>* first = head;
+        common::NodeSLL<T>* curr  = first, *prev = curr;
         
          while (curr){  
 
@@ -186,16 +210,19 @@ namespace myDoubleLinkedList{
         }
         
         return false;        
+        
     }
 
-    void reverseLL(Node *first){
+    template <class T>
+    void myDoubleLinkedList<T>::reverse(){
 
-        if (isEmptyLL(first)){
-            emptyLLMSG();
+        if (isEmpty()){
+            common::emptyLLMSG();
             return;
         }
 
-        Node *temp=head;
+        common::NodeDLL<T>* first = head;
+        common::NodeDLL<T>* temp = first;
 
         while(temp){
 
@@ -213,21 +240,24 @@ namespace myDoubleLinkedList{
 
     }
 
-    void insertNodeLL(Node *first, int index, int value){
+    template <class T>
+    void myDoubleLinkedList<T>::insertNode(int index, T value){
 
-        int lengthLL = getSizeLL(first);
+        int lengthLL = getSize();
         
         if (index  > lengthLL || index < 0){
             cout << "Index is out of Linked List size!\n";
             return;
         }
-            
-        Node *temp = new Node; 
+
+        common::NodeDLL<T>* first = head;
+        common::NodeDLL<T>* last = getLastNode();
+        common::NodeDLL<T>* temp = new common::NodeDLL<T>; 
         temp->data = value;
-         Node *last = getLastNodeLL(head);
+         
 
         if (index == 0){
-
+            
             temp->next = head;
             head->previous = temp;
 
@@ -236,9 +266,7 @@ namespace myDoubleLinkedList{
                 temp->previous = last;
             }
                 
-            
             head = temp;
-            temp = NULL; delete temp;
         }
         else{
             
@@ -249,27 +277,30 @@ namespace myDoubleLinkedList{
 
             if (last->next == head)
                 first->next->previous = temp;
+            
             first->next = temp;
             temp->previous = first;
         }    
     }
 
-    void deleteNodeLL( Node *first, int index){
+    template <class T>
+    void myDoubleLinkedList<T>::deleteNode(int index){
         
-        if (isEmptyLL(first)){
-            emptyLLMSG();
+        if (isEmpty()){
+            common::emptyLLMSG();
             return;
         }
             
-        if (index <0 || index >= getSizeLL(first)){
+        if (index <0 || index >= getSize()){
             cout << "Index is out of Linked List size!\n";  
             return;
         } 
         
-        Node *temp = new Node;
+        common::NodeDLL<T>* first = head;
+        common::NodeDLL<T>* temp = new common::NodeDLL<T>;
 
         if (index == 0){
-            Node *last = getLastNodeLL(head);
+            common::NodeDLL<T>* last = getLastNode();
 
             temp = head->next;
 
@@ -280,7 +311,6 @@ namespace myDoubleLinkedList{
                
             
             head = temp;
-            temp = NULL; delete temp;
         }            
         else {
             for (int i=0; i<index-1; i++)
@@ -288,63 +318,70 @@ namespace myDoubleLinkedList{
                        
             temp = first->next;
             first->next = temp->next;
-            temp = NULL; delete temp;
         }     
     }
 
-    Node *concatenateLL(Node *first, Node *second){
+    template <class T>
+    myDoubleLinkedList<T> myDoubleLinkedList<T>::concatenate(myDoubleLinkedList<T> secondLL){
 
-        if(isEmptyLL(first) && isEmptyLL(second)){
+        myDoubleLinkedList<T> concatenated;
+
+        if(isEmpty() && secondLL.isEmpty()){
             cout << "Empty Linked Lists!\n";
-            return NULL; 
+            return concatenated; 
         }
 
-        if (isEmptyLL(first))
-            return second;
-        if (isEmptyLL(second))
-            return first;
+        if (isEmpty())
+            return secondLL;
+        if (secondLL.isEmpty())
+            return *this;
        
-        Node *concatenated = first;
+        common::NodeDLL<T>* first = head;
+        concatenated.head = first;
 
         while(first->next)
             first = first->next;
         
-        first->next = second;
-        second->previous = first;
+        first->next = secondLL.head;
+        secondLL.head->previous = first;
         
         return concatenated;              
     }
 
-     Node *mergeLL(Node *first, Node *second){
+    template <class T>
+    myDoubleLinkedList<T> myDoubleLinkedList<T>::merge(myDoubleLinkedList<T> secondLL){
         
-        if(isEmptyLL(first) && isEmptyLL(second)){
+        myDoubleLinkedList<T> merged;
+
+        if(isEmpty() && secondLL.isEmpty()){
             cout << "Empty Linked Lists!\n";
-            return NULL; 
+            return merged; 
         }
         
-        if (isEmptyLL(first))
-            return second;
-        if (isEmptyLL(second))
-            return first;
+        if (isEmpty())
+            return secondLL;
+        if (secondLL.isEmpty())
+            return *this;
         
-        if ( !isSortedLL(first) && !isSortedLL(second)){
+        if ( !isSorted() && !secondLL.isSorted()){
             cout << "Merging requires 2 sorted Linked Lists!\n";
             return NULL;
         }
 
-        Node *merged = new Node;
-        
+        common::NodeDLL<T>* first = head;
+        common::NodeDLL<T>* second = secondLL.head;
+
         if (first->data < second->data){
-            merged = first;
+            merged.head = first;
             first = first->next;
         }   
         else{
-            merged = second;
+            merged.head = second;
             second= second->next;
         }
 
-        Node *temp = merged;      
-        
+        common::NodeDLL<T>* temp = merged.head;
+
         while(first && second){
             if (first->data < second->data){
                 temp->next = first;
@@ -369,7 +406,33 @@ namespace myDoubleLinkedList{
             temp->next = first;
             first->previous = temp;
         }
-            
-        return merged;           
+
+        return merged;
     }
-} // namespace myDoubleLinkedList
+
+    template <class T>
+    int myDoubleLinkedList<T>::searchNode(T key){
+
+        if (isEmpty()){
+            common::emptyLLMSG();
+            return -1;
+        }
+
+        common::NodeDLL<T>* first = head;
+        int index=0;
+
+        while (first){
+            if (key == first->data)
+                return index;
+
+            index++;
+
+            if (first->next == head)
+                break;
+
+            first = first->next;
+        }
+
+        return -1;
+    }
+
