@@ -4,6 +4,8 @@
 #include "double_linked_list.h"
 #include "stack_array.h"
 #include "stack_linked_list.h"
+#include "queue_array.h"
+
 using namespace std;
 
 int main(){
@@ -78,23 +80,43 @@ int main(){
 //    mySingleLinkedList<int> mer = LL1.merge(&LL2);
 //    mer.display();
 
+
 //stack linked list test
-    myStackLL<char> stk;
+    //myStackLL<char> stk;
+//    myStackArray<char> stk;
+//    cout << stk.isEmpty() <<endl;
+//    cout << stk.getTop() <<endl;
+//
+//    stk.push('a');
+//    stk.push('b');
+//    stk.push('c');
+//    stk.push('d');
+//
+//    cout << stk.getTop() <<endl;
+//    cout << stk.pop() <<endl;
+//    stk.display();
+//    cout << stk.getSize() <<endl;
+//    stk.~myStackArray();
+//
+//    cout << stk.isEmpty() <<endl;
 
-    cout << stk.isEmpty() <<endl;
-    cout << stk.getTop() <<endl;
 
-    stk.push('a');
-    stk.push('b');
-    stk.push('c');
-    stk.push('d');
-
-    cout << stk.getTop() <<endl;
-    cout << stk.pop() <<endl;
-    stk.display();
-    cout << stk.getSize() <<endl;
-    cout << stk.isEmpty() <<endl;
-
+    myQueueArray<int> q;
+    q.enqueue(58);
+    q.enqueue(58);
+    q.enqueue(58);
+    q.enqueue(58);
+    q.enqueue(58);
+    q.enqueue(58);
+    q.enqueue(58);
+    q.enqueue(58);
+    q.enqueue(58);
+    q.enqueue(58);
+    cout << q.isFull() <<endl;
+    q.dequeue();
+    q.dequeue();
+    q.enqueue(58);
+    cout << q.isFull() <<endl;
 }
 
 

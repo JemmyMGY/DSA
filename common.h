@@ -16,6 +16,10 @@ namespace common{
         cout << "Empty Stack!\n";
     }
 
+    void emptyQueueMSG(){
+        cout << "Queue is Empty\n";
+    }
+
     template <class T>
     class NodeSLL{
     public:

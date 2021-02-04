@@ -5,8 +5,7 @@ template <class T>
 class myStackArray {
     private:
         int size, top;
-        T *array;
-        void clearStack();
+        T* array;
     public:
         myStackArray(){
             size =10;
@@ -35,14 +34,7 @@ class myStackArray {
 
     template<class T>
     myStackArray<T>::~myStackArray(){
-        clearStack();
-    }
-
-    template <class T>
-    void myStackArray<T>::clearStack(){
-        
-        while (top > -1)
-            --top;
+        top=-1;
     }
 
     template <class T>
@@ -57,7 +49,6 @@ class myStackArray {
 
     template <class T>
     void myStackArray<T>::push(T value){
-        
         if( isFull() ){
             cout << "Stack Overflow!\n";
             return;
@@ -68,25 +59,21 @@ class myStackArray {
 
     template <class T>
     T myStackArray<T>::pop(){
-        
         if(isEmpty()){
-            cout << "Stack Underflow!\n";
+            common::emptyStackMSG();
             T empty;
             return empty;
         }
-
         return array[top--];
     }
 
     template <class T>
     T myStackArray<T>::getTop(){
-
         if (isEmpty()){
             common::emptyStackMSG();
             T empty;
             return empty;
         }
-
         return array[top];
     }
 
@@ -97,7 +84,6 @@ class myStackArray {
 
     template <class T>
     void myStackArray<T>::display(){
-
         if(isEmpty()){
             cout << "Empty Stack!\n";
             return;
